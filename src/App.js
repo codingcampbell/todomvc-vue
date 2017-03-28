@@ -1,14 +1,14 @@
 import Vue from 'vue';
+import Header from './components/Header';
+import Store from './Store';
 
 export default Vue.extend({
   name: 'app',
 
   render() {
     return <section class="todoapp">
-			<header class="header">
-				<h1>todos</h1>
-				<input class="new-todo" placeholder="What needs to be done?" autofocus/>
-			</header>
+      <Header/>
+
 			{/* This section should be hidden by default and shown when there are todos */}
 			<section class="main">
 				<input class="toggle-all" type="checkbox"/>
