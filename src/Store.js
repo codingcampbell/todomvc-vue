@@ -12,9 +12,7 @@ const addTodo = function() {
 
   this.inputTask = '';
 
-  try {
-    window.sessionStorage.todos = JSON.stringify(this.todos);
-  } catch (e) {}
+  this.save();
 };
 
 const removeTodo = function(todoToRemove) {
@@ -53,6 +51,20 @@ const Store = Vue.extend({
     },
   },
 
+  methods: {
+    load() {
+      try {
+        this.todos = JSON.parse(window.sessionStorage.todos);
+      } catch (e) {}
+    },
+
+    save() {
+      try {
+        window.sessionStorage.todos = JSON.stringify(this.todos);
+      } catch (e) {}
+    },
+  },
+
   created() {
     this.$on('add-todo', addTodo.bind(this));
     this.$on('remove-todo', removeTodo.bind(this));
@@ -64,9 +76,9 @@ const Store = Vue.extend({
       this.mouseDownTarget = e.target;
     });
 
-    try {
-      this.todos = JSON.parse(window.sessionStorage.todos);
-    } catch (e) {}
+    this.load();
+
+    this.$watch('todos', this.save, { deep: true });
   }
 });
 
