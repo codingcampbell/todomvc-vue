@@ -6,6 +6,12 @@ import Store from './Store';
 export default Vue.extend({
   name: 'App',
 
+  methods: {
+    clearCompleted() {
+      Store.$emit('clear-completed');
+    }
+  },
+
   render() {
     return <section class="todoapp">
       <Header/>
@@ -26,8 +32,9 @@ export default Vue.extend({
             <a href="#/completed">Completed</a>
           </li>
         </ul>
-        {/* Hidden if no completed items are left ↓ */}
-        <button class="clear-completed">Clear completed</button>
+        { Store.completedTodos.length === 0 ? null : (
+          <button class="clear-completed" onClick={this.clearCompleted}>Clear completed</button>
+        )}
       </footer>
     </section>;
   }
