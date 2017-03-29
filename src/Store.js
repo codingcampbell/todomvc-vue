@@ -34,6 +34,7 @@ const Store = Vue.extend({
       inputTask: '',
       todos: [],
       mouseDownTarget: null,
+      filter: null,
     };
   },
 
