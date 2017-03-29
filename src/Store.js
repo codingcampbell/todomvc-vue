@@ -25,6 +25,10 @@ const clearCompleted = function() {
   this.todos = this.todos.filter(todo => !todo.completed);
 };
 
+const setAllTodos = function(completed) {
+  this.todos.forEach(todo => { todo.completed = completed; });
+};
+
 const Store = Vue.extend({
   name: 'Store',
   data() {
@@ -42,13 +46,19 @@ const Store = Vue.extend({
 
     completedTodos() {
       return this.todos.filter(todo => todo.completed);
-    }
+    },
+
+    allTodosComplete() {
+      return this.completedTodos.length === this.todos.length;
+    },
   },
 
   created() {
     this.$on('add-todo', addTodo.bind(this));
     this.$on('remove-todo', removeTodo.bind(this));
     this.$on('clear-completed', clearCompleted.bind(this));
+    this.$on('mark-all-complete', setAllTodos.bind(this, true));
+    this.$on('mark-all-incomplete', setAllTodos.bind(this, false));
 
     window.addEventListener('mousedown', e => {
       this.mouseDownTarget = e.target;
