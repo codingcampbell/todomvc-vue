@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Store from './Store';
 
 export default Vue.extend({
-  name: 'app',
+  name: 'App',
 
   render() {
     return <section class="todoapp">

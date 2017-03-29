@@ -3,7 +3,7 @@ import Vue from 'vue';
 window.Vue = Vue;
 
 const Store = Vue.extend({
-  name: 'store',
+  name: 'Store',
   data() {
     return {
       inputTask: '',

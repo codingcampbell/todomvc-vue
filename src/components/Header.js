@@ -4,24 +4,10 @@ import Store from '../Store';
 export default Vue.extend({
   name: 'Header',
 
-  data() {
-    return {
-      unwatch: null,
-    }
-  },
-
   methods: {
     handleInput(e) {
       Store.inputTask = e.target.value;
     },
-  },
-
-  mounted() {
-    this.unwatch = Store.$watch('inputTask', value => { this.$refs.input.value = value; });
-  },
-
-  destroyed() {
-    this.unwatch();
   },
 
   render() {
@@ -32,7 +18,7 @@ export default Vue.extend({
         class="new-todo"
         placeholder="What needs to be done?"
         autofocus
-        value={Store.inputTask}
+        domPropsValue={Store.inputTask}
         onInput={this.handleInput}/>
     </header>;
   }
