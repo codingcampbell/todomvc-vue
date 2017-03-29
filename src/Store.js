@@ -57,12 +57,24 @@ const Store = Vue.extend({
       try {
         this.todos = JSON.parse(window.sessionStorage.todos);
       } catch (e) {}
+
+      this.getFilterFromURL();
     },
 
     save() {
       try {
         window.sessionStorage.todos = JSON.stringify(this.todos);
       } catch (e) {}
+    },
+
+    getFilterFromURL() {
+      const hash = window.location.hash.slice(2);
+
+      if (hash === 'active' || hash === 'completed') {
+        this.filter = hash;
+      } else {
+        this.filter = null;
+      }
     },
   },
 
@@ -76,6 +88,7 @@ const Store = Vue.extend({
     window.addEventListener('mousedown', e => {
       this.mouseDownTarget = e.target;
     });
+    window.addEventListener('hashchange', this.getFilterFromURL);
 
     this.load();
 

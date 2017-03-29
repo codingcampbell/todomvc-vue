@@ -15,20 +15,9 @@ export default Vue.extend({
       Store.$emit('clear-completed');
     },
 
-    filterClear(e) {
-      e.preventDefault();
-      Store.filter = null;
-    },
-
-    filterActive(e) {
-      e.preventDefault();
-      Store.filter = 'active';
-    },
-
-    filterCompleted(e) {
-      e.preventDefault();
-      Store.filter = 'completed';
-    },
+    updateFilter() {
+      Store.getFilterFromURL();
+    }
   },
 
   render() {
@@ -37,13 +26,13 @@ export default Vue.extend({
       <span class="todo-count"><strong>{this.itemsLeft}</strong> {this.itemsLeft === 1 ? 'item' : 'items'} left</span>
       <ul class="filters">
         <li>
-          <a class={{selected: !Store.filter}} href="#/" onClick={this.filterClear}>All</a>
+          <a class={{selected: !Store.filter}} href="#/" onClick={this.updateFilter}>All</a>
         </li>
         <li>
-          <a class={{selected: Store.filter === 'active'}} href="#/active" onClick={this.filterActive}>Active</a>
+          <a class={{selected: Store.filter === 'active'}} href="#/active" onClick={this.updateFilter}>Active</a>
         </li>
         <li>
-          <a class={{selected: Store.filter === 'completed'}} href="#/completed" onClick={this.filterCompleted}>Completed</a>
+          <a class={{selected: Store.filter === 'completed'}} href="#/completed" onClick={this.updateFilter}>Completed</a>
         </li>
       </ul>
       { Store.completedTodos.length === 0 ? null : (
