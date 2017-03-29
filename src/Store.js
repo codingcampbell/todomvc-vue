@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import * as util from './util';
 
 const addTodo = function() {
   if (!this.inputTask.length) {
@@ -7,12 +6,15 @@ const addTodo = function() {
   }
 
   this.todos.push({
-    id: util.id(),
     task: this.inputTask,
     completed: false,
   });
 
   this.inputTask = '';
+};
+
+const removeTodo = function(todoToRemove) {
+  this.todos = this.todos.filter(todo => todo !== todoToRemove);
 };
 
 const Store = Vue.extend({
@@ -21,11 +23,17 @@ const Store = Vue.extend({
     return {
       inputTask: '',
       todos: [],
+      mouseDownTarget: null,
     };
   },
 
   created() {
     this.$on('add-todo', addTodo.bind(this));
+    this.$on('remove-todo', removeTodo.bind(this));
+
+    window.addEventListener('mousedown', e => {
+      this.mouseDownTarget = e.target;
+    });
   }
 });
 

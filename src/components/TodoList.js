@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Store from '../Store';
+import Todo from './Todo';
 
 export default Vue.extend({
   name: 'TodoList',
@@ -11,18 +12,9 @@ export default Vue.extend({
     return Store.todos.length === 0 ? null : <section class="main">
       <input class="toggle-all" type="checkbox"/>
       <label for="toggle-all">Mark all as complete</label>
-      <ul class="todo-list">
-        { Store.todos.map(todo => 
-          <li key={todo.id} class={{completed: todo.completed}}>
-            <div class="view">
-              <input class="toggle" type="checkbox" domPropsChecked={todo.completed}/>
-              <label>{todo.task}</label>
-              <button class="destroy"></button>
-            </div>
-            <input class="edit" domPropsValue={todo.task}/>
-          </li>
-        )}
-      </ul>
+      <ul class="todo-list">{ Store.todos.map((todo, index) =>
+        <Todo key={index + '-' + todo.task} todo={todo}/>
+      )}</ul>
     </section>;
   }
 });
