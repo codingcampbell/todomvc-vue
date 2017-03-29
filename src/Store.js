@@ -11,6 +11,10 @@ const addTodo = function() {
   });
 
   this.inputTask = '';
+
+  try {
+    window.sessionStorage.todos = JSON.stringify(this.todos);
+  } catch (e) {}
 };
 
 const removeTodo = function(todoToRemove) {
@@ -34,6 +38,10 @@ const Store = Vue.extend({
     window.addEventListener('mousedown', e => {
       this.mouseDownTarget = e.target;
     });
+
+    try {
+      this.todos = JSON.parse(window.sessionStorage.todos);
+    } catch (e) {}
   }
 });
 
