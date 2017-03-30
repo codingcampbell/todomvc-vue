@@ -33,8 +33,8 @@ export default Vue.extend({
 
   render() {
     return <section class="main">
-      <input class="toggle-all" type="checkbox" domPropsChecked={Store.allTodosComplete}/>
-      <label for="toggle-all" onClick={this.handleToggle}>Mark all as complete</label>
+      <input class="toggle-all" type="checkbox" domPropsChecked={Store.allTodosComplete} onClick={this.handleToggle}/>
+      <label for="toggle-all">Mark all as complete</label>
       <ul class="todo-list">{ this.todos.map((todo, index) =>
         <Todo key={index + '-' + todo.task} todo={todo}/>
       )}</ul>
