@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import Store from '../Store';
 
 export default Vue.extend({
   name: 'Todo',
@@ -11,14 +10,13 @@ export default Vue.extend({
   data() {
     return {
       editing: false,
-      store: Store,
     };
   },
 
   methods: {
     handleCheck(e) {
       e.preventDefault();
-      this.todo.completed = e.target.checked;
+      this.$store.commit('toggleTodo', { todo: this.todo, completed: e.target.checked });
     },
 
     handleEdit(e) {
@@ -31,20 +29,22 @@ export default Vue.extend({
       if (e.keyCode === 27) { // ESC to cancel
         this.editing = false;
       } else if (e.keyCode === 13) { // Return to submit
-        this.save();
+        e.target.blur(); // will trigger a save()
       }
     },
+
     remove() {
-      Store.$emit('remove-todo', this.todo);
+      this.$store.commit('removeTodo', this.todo);
     },
+
     save() {
       this.editing = false;
-      const value = this.$refs.editInput.value.trim();
-      if (!value.length) {
+      const task = this.$refs.editInput.value.trim();
+      if (!task.length) {
         this.remove();
       }
 
-      this.todo.task = value;
+      this.$store.commit('editTodo', { todo: this.todo, task });
     },
   },
 

@@ -1,95 +1,74 @@
-import Vue from 'vue';
+export default {
+  strict: process.env.NODE_ENV !== 'production',
 
-const addTodo = function() {
-  if (!this.inputTask.length) {
-    return;
-  }
-
-  this.todos.push({
-    task: this.inputTask,
-    completed: false,
-  });
-
-  this.inputTask = '';
-
-  this.save();
-};
-
-const removeTodo = function(todoToRemove) {
-  this.todos = this.todos.filter(todo => todo !== todoToRemove);
-};
-
-const clearCompleted = function() {
-  this.todos = this.todos.filter(todo => !todo.completed);
-};
-
-const setAllTodos = function(completed) {
-  this.todos.forEach(todo => { todo.completed = completed; });
-};
-
-const Store = Vue.extend({
-  name: 'Store',
-  data() {
-    return {
-      inputTask: '',
-      todos: [],
-      filter: null,
-    };
+  state: {
+    todos: [],
+    filter: null,
   },
 
-  computed: {
-    activeTodos() {
-      return this.todos.filter(todo => !todo.completed);
+  mutations: {
+    addTodo(state, { task, completed }) {
+      state.todos.push({
+        id: String(Math.random()).slice(2),
+        task,
+        completed: !!completed,
+      });
     },
 
-    completedTodos() {
-      return this.todos.filter(todo => todo.completed);
+    removeTodo(state, todo) {
+      state.todos.splice(state.todos.indexOf(todo), 1);
     },
 
-    allTodosComplete() {
-      return this.completedTodos.length === this.todos.length;
-    },
-  },
-
-  methods: {
-    load() {
-      try {
-        this.todos = JSON.parse(window.sessionStorage.todos);
-      } catch (e) {}
-
-      this.getFilterFromURL();
+    editTodo(state, { todo, task }) {
+      todo.task = task;
     },
 
-    save() {
-      try {
-        window.sessionStorage.todos = JSON.stringify(this.todos);
-      } catch (e) {}
+    editAllTodos(state, data) {
+      state.todos.forEach(todo => Object.assign(todo, data));
     },
 
-    getFilterFromURL() {
+    toggleTodo(state, { todo, completed }) {
+      todo.completed = completed;
+    },
+
+    setTodos(state, { todos }) {
+      state.todos = todos;
+    },
+
+    clearCompletedTodos(state) {
+      state.todos = state.todos.filter(todo => !todo.completed);
+    },
+
+    getFilterFromURL(state) {
       const hash = window.location.hash.slice(2);
 
       if (hash === 'active' || hash === 'completed') {
-        this.filter = hash;
+        state.filter = hash;
       } else {
-        this.filter = null;
+        state.filter = null;
       }
     },
   },
 
-  created() {
-    this.$on('add-todo', addTodo.bind(this));
-    this.$on('remove-todo', removeTodo.bind(this));
-    this.$on('clear-completed', clearCompleted.bind(this));
-    this.$on('mark-all-complete', setAllTodos.bind(this, true));
-    this.$on('mark-all-incomplete', setAllTodos.bind(this, false));
+  actions: {
+    loadTodos({ commit }) {
+      try {
+        commit('setTodos', { todos: JSON.parse(window.sessionStorage.todos) });
+      } catch (e) {}
+    },
 
-    window.addEventListener('hashchange', this.getFilterFromURL);
+    saveTodos({ state }) {
+      try {
+        window.sessionStorage.todos = JSON.stringify(state.todos);
+      } catch (e) {}
+    },
+  },
 
-    this.load();
+  getters: {
+    activeTodos: state => state.todos.filter(todo => !todo.completed),
 
-    this.$watch('todos', this.save, { deep: true });
+    completedTodos: state => state.todos.filter(todo => todo.completed),
+
+    allTodosComplete: (state, getters) => getters.completedTodos.length === state.todos.length,
   }
-});
-
-export default new Store();
+};

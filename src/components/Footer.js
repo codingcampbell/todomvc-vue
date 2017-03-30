@@ -1,19 +1,19 @@
 import Vue from 'vue';
-import Store from '../Store';
+import { mapGetters, mapMutations, mapState } from 'vuex';
 
 export default Vue.extend({
   name: 'Footer',
   
   computed: {
     itemsLeft() {
-      return Store.activeTodos.length;
+      return this.activeTodos.length;
     },
+    ...mapGetters(['activeTodos', 'completedTodos']),
+    ...mapState(['filter']),
   },
 
   methods: {
-    clearCompleted() {
-      Store.$emit('clear-completed');
-    },
+    ...mapMutations(['clearCompletedTodos', 'getFilterFromURL']),
   },
 
   render() {
@@ -21,17 +21,17 @@ export default Vue.extend({
       <span class="todo-count"><strong>{this.itemsLeft}</strong> {this.itemsLeft === 1 ? 'item' : 'items'} left</span>
       <ul class="filters">
         <li>
-          <a class={{selected: !Store.filter}} href="#/">All</a>
+          <a class={{selected: !this.filter}} href="#/">All</a>
         </li>
         <li>
-          <a class={{selected: Store.filter === 'active'}} href="#/active">Active</a>
+          <a class={{selected: this.filter === 'active'}} href="#/active">Active</a>
         </li>
         <li>
-          <a class={{selected: Store.filter === 'completed'}} href="#/completed">Completed</a>
+          <a class={{selected: this.filter === 'completed'}} href="#/completed">Completed</a>
         </li>
       </ul>
-      { Store.completedTodos.length === 0 ? null : (
-        <button class="clear-completed" onClick={this.clearCompleted}>Clear completed</button>
+      { this.completedTodos.length === 0 ? null : (
+        <button class="clear-completed" onClick={this.clearCompletedTodos}>Clear completed</button>
       )}
     </footer>;
   }

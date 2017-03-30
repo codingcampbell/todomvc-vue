@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Store from '../Store';
+import { mapGetters, mapState }  from 'vuex';
 import Todo from './Todo';
 
 export default Vue.extend({
@@ -7,36 +7,32 @@ export default Vue.extend({
 
   computed: {
     todos() {
-      if (!Store.filter) {
-        return Store.todos;
+      if (this.filter === 'active') {
+        return this.activeTodos;
       }
 
-      return Store.todos.filter(todo => {
-        if (Store.filter === 'active') {
-          return !todo.completed;
-        }
+      if (this.filter === 'completed') {
+        return this.completedTodos;
+      }
 
-        if (Store.filter === 'completed') {
-          return todo.completed;
-        }
-
-        return true;
-      });
-    }
+      return this.$store.state.todos;
+    },
+    ...mapState(['filter']),
+    ...mapGetters(['activeTodos', 'completedTodos', 'allTodosComplete']),
   },
 
   methods: {
     handleToggle(e) {
-      Store.$emit(Store.allTodosComplete ? 'mark-all-incomplete' : 'mark-all-complete');
+      this.$store.commit('editAllTodos', { completed: !this.allTodosComplete });
     },
   },
 
   render() {
     return <section class="main">
-      <input class="toggle-all" type="checkbox" domPropsChecked={Store.allTodosComplete} onClick={this.handleToggle}/>
+      <input class="toggle-all" type="checkbox" domPropsChecked={this.allTodosComplete} onClick={this.handleToggle}/>
       <label for="toggle-all">Mark all as complete</label>
       <ul class="todo-list">{ this.todos.map((todo, index) =>
-        <Todo key={index + '-' + todo.task} todo={todo}/>
+        <Todo key={todo.id} todo={todo}/>
       )}</ul>
     </section>;
   }

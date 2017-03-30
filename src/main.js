@@ -1,14 +1,18 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
 import App from './App';
+import Store from './Store';
 
 import '../node_modules/todomvc-common/base.js';
 import './styles/styles.scss';
 
 Vue.config.productionTip = false;
+Vue.use(Vuex);
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store: new Vuex.Store(Store),
   render(h) {
     return <div>
       <App/>
