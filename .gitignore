@@ -1,5 +1,7 @@
 .DS_Store
 node_modules/
+/static/learn.json
+/static/favicon.ico
 dist/
 npm-debug.log*
 yarn-debug.log*
