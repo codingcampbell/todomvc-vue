@@ -14,25 +14,20 @@ export default Vue.extend({
     clearCompleted() {
       Store.$emit('clear-completed');
     },
-
-    updateFilter() {
-      Store.getFilterFromURL();
-    }
   },
 
   render() {
-    /* This footer should hidden by default and shown when there are todos */
     return <footer class="footer">
       <span class="todo-count"><strong>{this.itemsLeft}</strong> {this.itemsLeft === 1 ? 'item' : 'items'} left</span>
       <ul class="filters">
         <li>
-          <a class={{selected: !Store.filter}} href="#/" onClick={this.updateFilter}>All</a>
+          <a class={{selected: !Store.filter}} href="#/">All</a>
         </li>
         <li>
-          <a class={{selected: Store.filter === 'active'}} href="#/active" onClick={this.updateFilter}>Active</a>
+          <a class={{selected: Store.filter === 'active'}} href="#/active">Active</a>
         </li>
         <li>
-          <a class={{selected: Store.filter === 'completed'}} href="#/completed" onClick={this.updateFilter}>Completed</a>
+          <a class={{selected: Store.filter === 'completed'}} href="#/completed">Completed</a>
         </li>
       </ul>
       { Store.completedTodos.length === 0 ? null : (
