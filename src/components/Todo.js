@@ -15,21 +15,10 @@ export default Vue.extend({
     };
   },
 
-  watch: {
-    'store.mouseDownTarget': function(target) {
-      // Cancel editing if user clicks elsewhere
-      this.editing = target === this.$refs.editInput;
-    },
-  },
-
   methods: {
     handleCheck(e) {
       e.preventDefault();
       this.todo.completed = e.target.checked;
-    },
-
-    handleDestroy() {
-      Store.$emit('remove-todo', this.todo);
     },
 
     handleEdit(e) {
@@ -42,9 +31,20 @@ export default Vue.extend({
       if (e.keyCode === 27) { // ESC to cancel
         this.editing = false;
       } else if (e.keyCode === 13) { // Return to submit
-        this.editing = false;
-        this.todo.task = e.target.value;
+        this.save();
       }
+    },
+    remove() {
+      Store.$emit('remove-todo', this.todo);
+    },
+    save() {
+      this.editing = false;
+      const value = this.$refs.editInput.value.trim();
+      if (!value.length) {
+        this.remove();
+      }
+
+      this.todo.task = value;
     },
   },
 
@@ -53,12 +53,13 @@ export default Vue.extend({
       <div class="view">
         <input class="toggle" type="checkbox" onChange={this.handleCheck} domPropsChecked={this.todo.completed}/>
         <label onDblclick={this.handleEdit}>{this.todo.task}</label>
-        <button class="destroy" onClick={this.handleDestroy}></button>
+        <button class="destroy" onClick={this.remove}></button>
       </div>
       <input
         ref="editInput"
         class="edit"
         domPropsValue={this.todo.task}
+        onBlur={this.save}
         onKeyup={this.handleKeyUp}/>
     </li>;
   }

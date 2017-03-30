@@ -33,7 +33,6 @@ const Store = Vue.extend({
     return {
       inputTask: '',
       todos: [],
-      mouseDownTarget: null,
       filter: null,
     };
   },
@@ -85,9 +84,6 @@ const Store = Vue.extend({
     this.$on('mark-all-complete', setAllTodos.bind(this, true));
     this.$on('mark-all-incomplete', setAllTodos.bind(this, false));
 
-    window.addEventListener('mousedown', e => {
-      this.mouseDownTarget = e.target;
-    });
     window.addEventListener('hashchange', this.getFilterFromURL);
 
     this.load();
