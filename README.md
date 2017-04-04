@@ -1,3 +1,5 @@
+** NOTE **: for the Vuex version, check out the [vuex](https://github.com/codingcampbell/todomvc-vue/tree/vuex) branch!
+
 # todomvc
 
 > TodoMVC
