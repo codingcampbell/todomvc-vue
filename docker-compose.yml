@@ -1,0 +1,28 @@
+version: '3'
+
+networks:
+  grow_proxy:
+    external: true
+
+services:
+  node:
+    restart: always
+    build: .
+    user: "node"
+    working_dir: /home/node/app
+    volumes:
+      - ./src:/home/node/app/src:ro
+      - ./dist:/home/node/app/dist
+      - ./public:/home/node/app/public:ro
+      - ./index.html:/home/node/app/index.html:ro
+      - ./vite.config.js:/home/node/app/vite.config.js:ro
+      - ./package.json:/home/node/app/package.json
+    command: "npx vite --host"
+    networks:
+      - grow_proxy
+    expose:
+      - 3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hey-http.rule=Host(`todo.local.thisisgrow.com`)"
+      - "traefik.http.routers.hey-http.entrypoints=web"
