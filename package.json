@@ -1,15 +1,18 @@
 {
-  "name": "vue-todomvc",
-  "version": "1.0.0",
-  "description": "TodoMVC",
-  "author": "Matt Campbell <matt@mattcampbell.net>",
-  "private": true,
+  "name": "vute-vite",
+  "version": "0.0.0",
   "scripts": {
-    "pre-build": "cp node_modules/todomvc/learn.json node_modules/todomvc/site-assets/favicon.ico static",
-    "start": "npm run dev",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
-    "todomvc-app-css": "2.0.5",
-    "todomvc-common": "^1.0.0"
+    "todomvc-app-css": "^2.4.1",
+    "vue": "^3.0.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.3.0",
+    "@vue/compiler-sfc": "^3.0.5",
+    "vite": "^2.4.4"
   }
 }
